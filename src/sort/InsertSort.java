@@ -3,10 +3,25 @@ package sort;
 import java.util.Arrays;
 
 public class InsertSort {
+    // 对数器测试
     public static void main(String[] args) {
-        int[] arr = {4, 5, 8, 1, 7, 6, 3, 9, 5, 7};
-        System.err.println("原来的数组" + Arrays.toString(arr));
-        System.out.println("排序后的数组:" + Arrays.toString(shellSort(arr)));
+        int testTime = 500000;
+        int size = 10;
+        int value = 100;
+        boolean succeed = true;
+        for (int i = 0; i < testTime; i++) {
+            int[] arr1 = ArrayUtils.generateRandomArray(size,value);
+            int[] arr2 = ArrayUtils.copyArray(arr1);
+            int[] arr3 = ArrayUtils.copyArray(arr1);
+            insertSort(arr1);
+            ArrayUtils.rightMathod(arr2);
+            if (!ArrayUtils.isEqual(arr1, arr2)) {
+                succeed = false;
+                ArrayUtils.printArray(arr3);
+                break;
+            }
+        }
+        System.out.println(succeed ? "succeed" : "you failed");
     }
 
     /**
@@ -21,22 +36,25 @@ public class InsertSort {
      * 将新元素插入到该位置后；
      * 重复步骤2~5。
      */
-    public static int[] insertSort(int[] sourceArray) {
-        // 对arr进行拷贝，不改变参数内容
-        int[] arr = Arrays.copyOf(sourceArray, sourceArray.length);
-
-        int preIndex, current;
-        for (int i = 1; i < arr.length; i++) {
-            preIndex = i - 1;
-            current = arr[i];
-            // 如果前一个值比当前大，就将前值往后移,直到找到合适位置
-            while (preIndex >= 0 && arr[preIndex] > current) {
-                arr[preIndex + 1] = arr[preIndex];
-                preIndex--;
-            }
-            arr[preIndex + 1] = current;
+    public static void insertSort(int[] arr) {
+        if (arr ==null || arr.length <2) {
+            return ;
         }
-        return arr;
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = i-1; j >= 0 && arr[j] > arr[j+1]; j--) {
+                swap(arr, j, j+1);
+            }
+        }
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+/*        arr[i] = arr[i] ^ arr[j];
+        arr[j] = arr[i] ^ arr[j];
+        arr[i] = arr[i] ^ arr[j];*/
+
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
     }
 
     /**
